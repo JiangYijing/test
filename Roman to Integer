@@ -1,0 +1,45 @@
+问题分析：
+考虑如何将罗马数字变为整数需要首先了解罗马数字的构成规律；
+再考虑将罗马数字变为整数的规律。注意数据范围。
+计数规则：
+相同的数字连写，所表示的数等于这些数字相加得到的数，例如：III = 3
+小的数字在大的数字右边，所表示的数等于这些数字相加得到的数，例如：VIII = 8
+小的数字，限于（I、X和C）在大的数字左边，所表示的数等于大数减去小数所得的数，例如：IV = 4
+正常使用时，连续的数字重复不得超过三次
+所以，可以考虑从前向后遍历罗马数字，如果某个数比前一个数小，则加上该数。反之，减去前一个数的两倍然后加上该数。
+
+编程实现：
+class Solution {
+public:
+    int romanToInt(string s) {
+        map<char,int> roman;
+        roman['I']=1;
+        roman['V']=5;
+        roman['X']=10;
+        roman['L']=50;
+        roman['C']=100;
+        roman['D']=500;
+        roman['M']=1000;
+        int result=0,num;
+        for(num=s.length()-1;num>=0;num --)
+        {
+            if(num==s.length()-1)
+            {
+                result=roman[s[num]];
+                continue;
+            }       
+            if(roman[s[num]]>=roman[s[num+1]])
+                result+=roman[s[num]];
+            else result-=roman[s[num]];
+        }
+        return result;
+        
+    }
+};
+
+总结体会：
+1.map的具体用法：
+一对一的数据（关键字，关键字的具体值）处理能力，数据自动排序，数据有序。
+先构造map函数再插入数据（用数组方式）再进行数据的遍历。
+2.越界问题处理，截取长度少一位数
+3.判断前一位与后一位的大小比较来加或减
